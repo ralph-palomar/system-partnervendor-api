@@ -1,0 +1,17 @@
+#%RAML 1.0
+title: Product Vendor API
+description: This API connects to the Partner Vendor via external web service.
+version: v1
+
+types:
+  productInfo: !include types/productInfo.dataType.raml
+  
+/v1:
+  /products:
+    post:
+      body:
+        application/json:
+          type: productInfo[]
+          example: !include examples/productInfo.list.example.json
+      responses:
+        201:

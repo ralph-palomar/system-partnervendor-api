@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="post-product-to-vendor-webservice" doc:id="fbbb28e2-8194-4347-b09e-87dfb0b8e0e8" >
+		<ee:transform doc:name="Transform SOAP Body" doc:id="0fd33721-0a8b-4070-a5ac-99ed1d14f70b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+ns ecom http://example.com/ecomm.xsd
+output application/xml
+---
+ecom#ProductRequest: {
+	Product: payload map (item) -> {
+		ProductId: item.productId,
+		ProductName: item.productName,
+		Description: item.description,
+		Price: item.price
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="PostProductInfo" doc:name="Post Products to Partner Vendor" doc:id="2b9745d4-1c7e-45ac-b4eb-10d3bc6ed60d" config-ref="web-service-consumer-config"/>
+	</sub-flow>
+</mule>

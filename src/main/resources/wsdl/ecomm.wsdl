@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<definitions name="EcommVendor"
+             targetNamespace="http://example.com/ecomm.wsdl"
+             xmlns:tns="http://example.com/ecomm.wsdl"
+             xmlns:xsd1="http://example.com/ecomm.xsd"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <types>
+    <schema targetNamespace="http://example.com/ecomm.xsd"
+            xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="ProductRequest">
+        <complexType>
+			<sequence minOccurs="1" maxOccurs="unbounded">
+				<element name="Product">
+					<complexType>
+						<sequence>
+							<element name="ProductId" type="integer" minOccurs="1"/>
+							<element name="ProductName" type="string" minOccurs="1"/>
+							<element name="Description" type="string" minOccurs="1"/>
+							<element name="Price" type="float" minOccurs="1"/>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+        </complexType>
+      </element>
+      <element name="ProductResponse">
+         <complexType>
+           <sequence>
+             <element name="received" type="boolean"/>
+           </sequence>
+         </complexType>
+      </element>
+    </schema>
+  </types>
+
+  <message name="ProductInfoInput">
+    <part name="body" element="xsd1:ProductRequest"/>
+  </message>
+
+  <message name="ProductInfoOutput">
+    <part name="body" element="xsd1:ProductResponse"/>
+  </message>
+
+  <portType name="ProductPortType">
+    <operation name="PostProductInfo">
+      <input message="tns:ProductInfoInput"/>
+      <output message="tns:ProductInfoOutput"/>
+    </operation>
+  </portType>
+
+  <binding name="ProductSoapBinding" type="tns:ProductPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="PostProductInfo">
+      <soap:operation soapAction="http://example.com/PostProductInfo"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="ProductService">
+    <documentation>Product Service</documentation>
+    <port name="ProductPort" binding="tns:ProductSoapBinding">
+      <soap:address location="http://example.com/product"/>
+    </port>
+  </service>
+
+</definitions>

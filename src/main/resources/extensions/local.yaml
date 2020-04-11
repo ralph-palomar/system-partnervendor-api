@@ -1,0 +1,4 @@
+webservice:
+   soap:
+      partnervendor:
+         address: "http://localhost:8088/mockProductSoapBinding"
